@@ -1,0 +1,4 @@
+.exchange-rates {
+    display: flex;
+    flex-direction: row;
+}

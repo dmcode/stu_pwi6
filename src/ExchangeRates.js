@@ -1,4 +1,6 @@
+import "./ExchangeRates.css"
 import { memo, useCallback, useState } from "react"
+import { Link, Outlet } from "react-router-dom"
 import DatePicker from 'react-date-picker'
 import { useExchangeRatesTableAQuery } from "./hooks/query"
 import { format_date_iso, str_to_date } from "./utils"
@@ -7,7 +9,7 @@ import { format_date_iso, str_to_date } from "./utils"
 const CurrencyRateRow = memo(({data}) => {
     return (
         <tr>
-            <td>{data?.currency}</td>
+            <td><Link to={data?.code}>{data?.currency}</Link></td>
             <td>{data?.code}</td>
             <td>{data?.mid}</td>
         </tr>
@@ -48,7 +50,7 @@ const ExchangeRatesHeader = memo(({data, onDateChange}) => {
 })
 
 
-function ExchangeRates() {
+function CurrencyList() {
     const [ratesDate, setRatesDate] = useState(null)
     const ratesQuery = useExchangeRatesTableAQuery(ratesDate)
 
@@ -65,10 +67,20 @@ function ExchangeRates() {
     const data = ratesQuery.data[0]
 
     return (
-        <section className="exchange-rates">
+        <div className="currency-list">
             <ExchangeRatesHeader data={data} onDateChange={onDateChange}/>
             <RatesDataTable data={data}/>
-        </section>
+        </div>
+    )
+}
+
+
+function ExchangeRates() {
+    return (
+        <div className="exchange-rates">
+            <CurrencyList/>
+            <Outlet/>
+        </div>
     )
 }
 
