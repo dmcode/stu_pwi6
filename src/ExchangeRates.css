@@ -1,4 +1,53 @@
 .exchange-rates {
     display: flex;
     flex-direction: row;
+    width: 100%;
+}
+
+.currency-list {
+    background: #faf9fa;
+    border-right: 3px solid #eae9ea;
+    width: 460px;
+}
+
+.currency-list header {
+    background: #eae9ea;
+    color: #454545;
+    font-size: 1.8rem;
+    padding: 1.5rem 2rem;
+    width: 100%;
+}
+
+.currency-list .rates-picker {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.currency-list .currency-list-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.rates-datatable {
+    border-collapse: collapse;
+}
+
+.rates-datatable tbody tr:nth-child(odd) {
+    background: #eae9ea;
+}
+
+.rates-datatable tbody td {
+    padding: 0.25rem 0.2rem;
+}
+
+.rates-query-error {
+    text-align: center;
+}
+
+.rates-query-error p {
+    font-weight: bold;
 }

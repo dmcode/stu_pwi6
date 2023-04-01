@@ -4,6 +4,7 @@ import { Link, Outlet } from "react-router-dom"
 import DatePicker from 'react-date-picker'
 import { useExchangeRatesTableAQuery } from "./hooks/query"
 import { format_date_iso, str_to_date } from "./utils"
+import SuspenseContent from "./components/SuspenseContent"
 
 
 const CurrencyRateRow = memo(({data}) => {
@@ -35,19 +36,34 @@ const RatesDataTable = memo(({data}) => {
 })
 
 
-const ExchangeRatesHeader = memo(({data, onDateChange}) => {
+const ExchangeRatesPicker = memo(({data, onDateChange}) => {
     const { no="brak danych", effectiveDate=null } = data
     const date = str_to_date(effectiveDate)
     return (
-        <header>
-            Średnie kursy walut NBP
-            <div>
-                <span>Tabela nr {no} z dnia</span> 
-                <DatePicker onChange={onDateChange} value={date} maxDate={new Date()}/>
-            </div>
-        </header>
+        <div className="rates-picker">
+            <span>Tabela nr {no} z dnia</span> 
+            <DatePicker onChange={onDateChange} value={date} maxDate={new Date()}/>
+        </div>
     )
 })
+
+
+const CurrencyListHeader = memo(() => <header>Średnie kursy walut NBP</header>) 
+
+const RatesQueryError = ({isError, ratesDate, onDateChange, children}) => {
+    if (!isError)
+        return children
+        const date = str_to_date(ratesDate)
+    return (
+        <div className="rates-query-error">
+            <p>Brak notowania dla wybranego dnia.</p>
+            <div>
+                <span>Spróbuj wybrać inny dzień </span>
+                <DatePicker onChange={onDateChange} value={date} maxDate={new Date()}/>
+            </div>
+        </div>
+    )
+}
 
 
 function CurrencyList() {
@@ -58,18 +74,19 @@ function CurrencyList() {
         setRatesDate(format_date_iso(value))
     }, [setRatesDate])
 
-    if (ratesQuery.isError)
-        return "brak danych"
-    
-    if (ratesQuery.isLoading)
-        return "ładowanie"
-
-    const data = ratesQuery.data[0]
+    const data = !ratesQuery.isLoading && !ratesQuery.isError ? ratesQuery.data[0] : null
 
     return (
         <div className="currency-list">
-            <ExchangeRatesHeader data={data} onDateChange={onDateChange}/>
-            <RatesDataTable data={data}/>
+            <CurrencyListHeader/>
+            <SuspenseContent isLoading={ratesQuery.isLoading}>
+                <RatesQueryError isError={ratesQuery.isError} ratesDate={ratesDate} onDateChange={onDateChange}>
+                <div className="currency-list-body">
+                    <ExchangeRatesPicker data={data} onDateChange={onDateChange}/>
+                    <RatesDataTable data={data}/>
+                </div>
+                </RatesQueryError>
+            </SuspenseContent>
         </div>
     )
 }

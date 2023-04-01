@@ -1,0 +1,40 @@
+.currency-rates {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #fcfcfc;
+    flex-grow: 1;
+}
+
+.currency-rates .currency-name {
+    background: #eae9ea;
+    color: #454545;
+    font-size: 1.8rem;
+    padding: 1.5rem 2rem;
+    width: 100%;
+}
+
+.currency-rates .rates-data {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+}
+
+.currency-rates .rates-datatable {
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    flex-grow: 1;
+    width: 22rem;
+}
+
+.currency-rates .rates-datatable td {
+    padding: 0.35rem 0.25rem;
+    text-align: center;
+}
+
+.currency-rates .rates-chart {
+    flex-grow: 2;
+}
