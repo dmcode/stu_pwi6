@@ -38,3 +38,15 @@
 .currency-rates .rates-chart {
     flex-grow: 2;
 }
+
+.topcount-selector select {
+    font-size: 1rem;
+    padding: 0.1rem 0.2rem;
+}
+
+.currency-rates .topcount-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-bottom: 1.2rem;
+}

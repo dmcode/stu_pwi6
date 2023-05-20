@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import ExchangeRates from './ExchangeRates'
 import CurrencyRates from './CurrencyRates'
+import AppProvider from './AppProvider'
 
 
 const router = createBrowserRouter([
@@ -25,7 +26,9 @@ const queryClient = new QueryClient()
 function App() {
     return (
         <QueryClientProvider client={queryClient}>
+          <AppProvider>
             <RouterProvider router={router}/>
+          </AppProvider>
         </QueryClientProvider>
     )
 }

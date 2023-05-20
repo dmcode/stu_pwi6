@@ -14,6 +14,7 @@ import {
 import { Line } from 'react-chartjs-2'
 import { useExchangeRatesTableACurrencyTopCountQuery } from "./hooks/query"
 import SuspenseContent from "./components/SuspenseContent"
+import useTopCount from "./hooks/useTopCount"
 
 
 ChartJS.register(
@@ -25,6 +26,25 @@ ChartJS.register(
     Tooltip,
     Legend
 )
+
+
+const TOPCOUNT_OPTIONS = ['10', '20', '40', '60', '120']
+
+const SelectTopCount = memo(() => {
+    const { code } = useParams()
+    const { count, setTopCount } = useTopCount(code)
+    return (
+        <label className="topcount-selector">
+            <span>Pokaz ostatnie</span>
+            <select value={count} onChange={(e) => setTopCount(e.target.value)}>
+                {
+                    TOPCOUNT_OPTIONS.map((value, idx) => <option key={idx} value={value}>{value}</option>)
+                }
+            </select>
+            notowań
+        </label>
+    )
+})
 
 
 const CurrencyRateRow = memo(({data}) => {
@@ -41,6 +61,8 @@ const CurrencyRateRow = memo(({data}) => {
 const RatesDataTable = memo(({data}) => {
     const rates = data?.rates
     return (
+        <div className="rates-datatable-container">
+            <SelectTopCount/>
         <table className="rates-datatable">
             <thead>
                 <tr>
@@ -53,6 +75,7 @@ const RatesDataTable = memo(({data}) => {
                 }
             </tbody>
         </table>
+        </div>
     )
 })
 
@@ -90,7 +113,8 @@ const RatesChart = ({data}) => {
 
 function CurrencyRates() {
     const { code } = useParams()
-    const ratesTopCountQuery = useExchangeRatesTableACurrencyTopCountQuery(code, 20)
+    const { count } = useTopCount(code)
+    const ratesTopCountQuery = useExchangeRatesTableACurrencyTopCountQuery(code, count)
 
     if (ratesTopCountQuery.isError)
         return "brak danych"
