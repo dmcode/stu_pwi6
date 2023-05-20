@@ -1,5 +1,7 @@
 import './App.css'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import ExchangeRates from './ExchangeRates'
 import CurrencyRates from './CurrencyRates'
@@ -20,7 +22,21 @@ const router = createBrowserRouter([
 ])
 
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 1000 * 60 * 60 * 6
+    },
+  },
+})
+
+const localStoragePersister = createSyncStoragePersister({ storage: window.localStorage })
+
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+  maxAge: 1000 * 60 * 60 * 6,
+})
 
 
 function App() {
