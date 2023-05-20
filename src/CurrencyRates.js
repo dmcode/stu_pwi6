@@ -1,6 +1,6 @@
 import "./CurrencyRates.css"
 import { memo } from "react"
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -15,6 +15,8 @@ import { Line } from 'react-chartjs-2'
 import { useExchangeRatesTableACurrencyTopCountQuery } from "./hooks/query"
 import SuspenseContent from "./components/SuspenseContent"
 import useTopCount from "./hooks/useTopCount"
+import useCodeNavigation from "./hooks/useCodeNavigation"
+import CurrencyNotFound from "./components/CurrencyNotFound"
 
 
 ChartJS.register(
@@ -111,21 +113,38 @@ const RatesChart = ({data}) => {
 }
 
 
+const LinkNextPrevCode = memo(({code}) => {
+    if (!code)
+        return <span className="empty-code"></span>
+    return <Link to={'/' + code} title={"Przejdź do waluty " + code} className="nav-code">{code}</Link>
+})
+
+
+const CurrencyName = memo(({data}) => {
+    const {prev, next} = useCodeNavigation(data?.code)
+    return (
+        <div className="currency-name">
+            <LinkNextPrevCode code={prev}/>
+            <span>{data?.code} - {data?.currency}</span>
+            <LinkNextPrevCode code={next}/>
+        </div>
+    )
+})
+
+
 function CurrencyRates() {
     const { code } = useParams()
     const { count } = useTopCount(code)
     const ratesTopCountQuery = useExchangeRatesTableACurrencyTopCountQuery(code, count)
 
     if (ratesTopCountQuery.isError)
-        return "brak danych"
+        return <CurrencyNotFound code={code}/>
     
     const data = ratesTopCountQuery.data
     
     return (
         <div className="currency-rates">
-            <div className="currency-name">
-                {data?.code} - {data?.currency}
-            </div>
+            <CurrencyName data={data}/>
             <SuspenseContent isLoading={ratesTopCountQuery.isLoading}>
                 <div className="rates-data">
                     <RatesDataTable data={data}/>

@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import ExchangeRates from './ExchangeRates'
 import CurrencyRates from './CurrencyRates'
 import AppProvider from './AppProvider'
+import PageNotFound from './components/PageNotFound'
 
 
 const router = createBrowserRouter([
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
           element: <CurrencyRates/>,
         },
       ],
+      errorElement: <PageNotFound/>,
     },
 ])
 

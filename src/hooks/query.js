@@ -18,7 +18,8 @@ export const useExchangeRatesTablesQuery = (table='a', date=null) => {
         }).then(response => response.json())
         return data
     }, {
-        retry: false
+        retry: false,
+        staleTime: 10 * 60 * 1000,
     })
 }
 
@@ -38,7 +39,8 @@ export const useExchangeRatesCurrencyTopCountQuery = (table='a', code, topCount=
         }).then(response => response.json())
         return data
     }, {
-        retry: false
+        retry: false,
+        staleTime: 10 * 60 * 1000,
     })
 }
 

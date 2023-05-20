@@ -48,7 +48,7 @@ const ExchangeRatesPicker = memo(({data, onDateChange}) => {
 })
 
 
-const CurrencyListHeader = memo(() => <header>Średnie kursy walut NBP</header>) 
+const CurrencyListHeader = memo(() => <header><Link to={"/"}>Średnie kursy walut NBP</Link></header>) 
 
 const RatesQueryError = ({isError, ratesDate, onDateChange, children}) => {
     if (!isError)
